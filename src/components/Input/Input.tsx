@@ -4,6 +4,7 @@ type InputProps = {
   type: string;
   placeholder: string;
   name: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export const Input = (props: InputProps) => {
