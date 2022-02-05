@@ -1,24 +1,43 @@
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import type { JSONContent } from '@tiptap/react';
 import useSWR, { useSWRConfig } from 'swr';
 import QRCode from 'qrcode.react';
-
-import toast, { Toaster } from 'react-hot-toast';
+import { useEditor, JSONContent, Editor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Placeholder from '@tiptap/extension-placeholder';
+import CharacterCount from '@tiptap/extension-character-count';
+import toast from 'react-hot-toast';
 
 import { Button, Input, Label, Tiptap } from '@/components/.';
 
 import { letterState } from '@/atoms/letter';
 
-import { submitLetter } from './util';
+import { handleValidation, submitLetter } from './util';
 
 export const FormMessage = () => {
   const [formStep, setFormStep] = useState(1);
   const { mutate } = useSWRConfig();
   const { data, error } = useSWR('/api/create');
 
+  const setLetterState = useSetRecoilState(letterState);
+
   const letterData = useRecoilValue(letterState);
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+
+      CharacterCount,
+      Placeholder.configure({
+        emptyEditorClass: 'tiptap-editor-is-empty',
+        placeholder: 'Express your thought here...'
+      })
+    ],
+
+    onUpdate: ({ editor }) => {
+      handleEditorChange(editor.getJSON());
+    }
+  });
 
   useEffect(() => {
     if (error) {
@@ -31,11 +50,15 @@ export const FormMessage = () => {
     if (data) {
       setFormStep(currentStep => currentStep + 1);
     }
-    // Object { letterId: "79adb862-e75b-46a0-becf-71b5c79e37bc" }
   }, [data]);
 
+  const handleEditorChange = (message: JSONContent) => {
+    setLetterState(letter => ({ ...letter, message: JSON.stringify(message) }));
+  };
+
   const nextFormStep = async () => {
-    handleValidation(letterData, formStep);
+    const isSuccess = handleValidation(letterData, formStep);
+    if (!isSuccess) return;
 
     if (formStep === 2) {
       try {
@@ -53,46 +76,48 @@ export const FormMessage = () => {
 
   const prevFormStep = () => setFormStep(currentStep => currentStep - 1);
 
+  if (!editor) return <h1>Loading...</h1>;
+
   return (
-    <div className='relative'>
+    <div>
       <h1 className='mb-6 text-3xl font-bold text-center font-charter'>
         To someone special
       </h1>
-      {formStep === 1 && <FirstStep />}
+
+      {formStep === 1 && <FirstStep editor={editor} />}
       {formStep === 2 && <SecondStep />}
       {formStep === 3 && <ThirdStep data={data} />}
 
       {formStep !== 3 && (
-        <div className='flex justify-between'>
-          {formStep !== 1 && (
-            <Button buttonType='secondary' onClick={prevFormStep}>
-              Back
-            </Button>
-          )}
-          <div />
-          {formStep >= 1 && (
-            <Button onClick={nextFormStep}>
-              {formStep === 2 ? 'Submit' : ' Next'}{' '}
-            </Button>
-          )}
+        <div className='absolute inset-x-0 bottom-0 w-full p-2 '>
+          <div className='flex items-center justify-between px-10 mx-auto md:px-40'>
+            <p>{editor.storage.characterCount.words()} words spoken </p>
+            <div className='flex flex-row items-center gap-4'>
+              {formStep !== 1 && (
+                <Button buttonType='secondary' onClick={prevFormStep}>
+                  Back
+                </Button>
+              )}
+              <div />
+              {formStep >= 1 && (
+                <Button onClick={nextFormStep}>
+                  {formStep === 2 ? 'Submit' : ' Next'}{' '}
+                </Button>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>
   );
 };
 
-const FirstStep = () => {
-  const setLetterState = useSetRecoilState(letterState);
-
-  const handleEditorChange = (message: JSONContent) => {
-    setLetterState(letter => ({ ...letter, message: JSON.stringify(message) }));
-  };
-
+const FirstStep = ({ editor }: { editor: Editor }) => {
   return (
-    <form className={clsx(' mb-4  ')}>
+    <form className={clsx('mb-4')}>
       <fieldset className='flex flex-col mb-6 '>
         <Label htmlFor='message'>Craft your message</Label>
-        <Tiptap onChange={handleEditorChange} />
+        <Tiptap editor={editor} />
       </fieldset>
     </form>
   );
@@ -138,26 +163,34 @@ const SecondStep = () => {
   );
 };
 const ThirdStep = ({ data }: any) => {
-  if (!data?.letterId) return <h1>Something went wrong</h1>;
+  if (!data) return <h1>Something went wrong</h1>;
 
   const downloadQR = () => {
-    const canvas = document.getElementById('qr-id');
+    const canvas = document.getElementById('qr-id') as HTMLCanvasElement;
     const pngUrl = canvas
       .toDataURL('image/png')
       .replace('image/png', 'image/octet-stream');
     let downloadLink = document.createElement('a');
     downloadLink.href = pngUrl;
-    downloadLink.download = '123456.png';
+    downloadLink.download = 'letter.png';
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
   };
 
   return (
-    <>
+    <div className='flex flex-col items-center'>
       <h1>Present this to your Special person </h1>;
-      <QRCode id='qr-id' value={data?.letterId} size={290} level={'H'} />
-      <a onClick={downloadQR}> Download QR </a>
-    </>
+      <QRCode
+        id='qr-id'
+        value={`${process.env.NEXT_PUBLIC_WEBSITE_URL}/${data?.letterId}`}
+        size={290}
+        level={'H'}
+      />
+      <Button className='mt-4' onClick={downloadQR}>
+        {' '}
+        Download QR{' '}
+      </Button>
+    </div>
   );
 };
