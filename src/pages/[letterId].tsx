@@ -19,7 +19,6 @@ const Letter = ({ letter }: dataProp) => {
 
   const { letterId } = router.query;
 
-  // console.log(letterId, 'letterId');
 
   const editor = useEditor({
     editable: false,
@@ -44,7 +43,6 @@ const Letter = ({ letter }: dataProp) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  // Fetch data from external API
   const { letterId } = query!;
 
   const letter = await db.letter.findUnique({
