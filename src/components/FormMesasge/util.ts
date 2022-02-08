@@ -1,5 +1,6 @@
 import { letter } from '@/utils/types';
 import toast from 'react-hot-toast';
+import { mutate } from 'swr';
 
 export const submitLetter = async (
   letterData: letter
@@ -15,6 +16,7 @@ export const submitLetter = async (
     }
   ).then(res => res.json());
 
+  mutate('/api/create', letter);
   return letter;
 };
 
