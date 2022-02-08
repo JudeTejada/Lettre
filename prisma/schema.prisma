@@ -10,11 +10,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 model Letter {
   id       String @id @default(uuid())
   sender   String
   receiver String
+  title    String
   message  String
 }

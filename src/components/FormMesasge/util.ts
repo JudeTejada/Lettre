@@ -22,7 +22,12 @@ export const handleValidation = (letterData: letter, formStep: number) => {
   switch (formStep) {
     case 1: {
       if (!letterData.message) {
-        toast('Please write something first');
+        toast("It's not a letter if there's no message ❌ ");
+
+        return false;
+      }
+      if (!letterData.title) {
+        toast('Have you forgotten your title? ❌');
 
         return false;
       }

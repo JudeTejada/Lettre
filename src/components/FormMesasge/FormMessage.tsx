@@ -15,14 +15,22 @@ import { letterState } from '@/atoms/letter';
 
 import { handleValidation, submitLetter } from './util';
 
+interface StepInputProps {
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+interface FirstStepProps extends StepInputProps {
+  editor: Editor;
+}
+
 export const FormMessage = () => {
   const [formStep, setFormStep] = useState(1);
   const { mutate } = useSWRConfig();
   const { data, error } = useSWR('/api/create');
 
   const setLetterState = useSetRecoilState(letterState);
-
   const letterData = useRecoilValue(letterState);
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -47,7 +55,7 @@ export const FormMessage = () => {
   }, [error]);
 
   useEffect(() => {
-    if (data) {
+    if (data?.success) {
       setFormStep(currentStep => currentStep + 1);
     }
   }, [data]);
@@ -56,6 +64,8 @@ export const FormMessage = () => {
     setLetterState(letter => ({ ...letter, message: JSON.stringify(message) }));
   };
 
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void =>
+    setLetterState(letter => ({ ...letter, [e.target.name]: e.target.value }));
   const nextFormStep = async () => {
     const isSuccess = handleValidation(letterData, formStep);
     if (!isSuccess) return;
@@ -80,12 +90,10 @@ export const FormMessage = () => {
 
   return (
     <div>
-      <h1 className='mb-6 text-3xl font-bold text-center font-charter'>
-        To someone special
-      </h1>
-
-      {formStep === 1 && <FirstStep editor={editor} />}
-      {formStep === 2 && <SecondStep />}
+      {formStep === 1 && (
+        <FirstStep onChange={handleOnChange} editor={editor} />
+      )}
+      {formStep === 2 && <SecondStep onChange={handleOnChange} />}
       {formStep === 3 && <ThirdStep data={data} />}
 
       {formStep !== 3 && (
@@ -112,9 +120,17 @@ export const FormMessage = () => {
   );
 };
 
-const FirstStep = ({ editor }: { editor: Editor }) => {
+const FirstStep = ({ editor, onChange }: FirstStepProps) => {
   return (
     <form className={clsx('mb-4')}>
+      <input
+        onChange={onChange}
+        type='text'
+        name='title'
+        className='w-full mb-6 text-3xl font-bold text-center bg-transparent appearance-none font-charter focus:outline-none focus:shadow-outline'
+        placeholder='Your title'
+      />
+
       <fieldset className='flex flex-col mb-6 '>
         <Label htmlFor='message'>Craft your message</Label>
         <Tiptap editor={editor} />
@@ -122,11 +138,8 @@ const FirstStep = ({ editor }: { editor: Editor }) => {
     </form>
   );
 };
-const SecondStep = () => {
+const SecondStep = ({ onChange }: StepInputProps) => {
   const setLetterState = useSetRecoilState(letterState);
-
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void =>
-    setLetterState(letter => ({ ...letter, [e.target.name]: e.target.value }));
 
   return (
     <div className={clsx(' mb-4  ')}>
@@ -138,7 +151,7 @@ const SecondStep = () => {
           Sender
         </label>
         <Input
-          onChange={handleOnChange}
+          onChange={onChange}
           type='text'
           placeholder='Lee'
           name='sender'
@@ -153,7 +166,7 @@ const SecondStep = () => {
           Receiver
         </label>
         <Input
-          onChange={handleOnChange}
+          onChange={onChange}
           type='text'
           placeholder='Lee'
           name='receiver'
