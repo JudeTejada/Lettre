@@ -23,8 +23,6 @@ export const FormMessage = () => {
   const [formStep, setFormStep] = useState(1);
   const { data, error } = useSWR('/api/create');
 
-  console.log(data, 'data');
-
   const setLetterState = useSetRecoilState(letterState);
   const letterData = useRecoilValue(letterState);
 
@@ -69,13 +67,12 @@ export const FormMessage = () => {
     if (formStep === 2) {
       try {
         setForm({ state: Form.Loading });
-        setTimeout(async () => {
-          const res = await submitLetter(letterData);
-        }, 5000);
+        const res = await submitLetter(letterData);
 
-        setForm({ state: Form.Loading });
+        setForm({ state: Form.Initial });
       } catch (error) {
         setFormStep(1);
+        setForm({ state: Form.Initial });
         throw new Error('Sorry something went wrong');
       }
 
@@ -95,7 +92,9 @@ export const FormMessage = () => {
         {formStep === 1 && (
           <FirstStep onChange={handleOnChange} editor={editor} />
         )}
-        {formStep === 2 && <SecondStep onChange={handleOnChange} />}
+        {formStep === 2 && (
+          <SecondStep editor={editor} onChange={handleOnChange} />
+        )}
         {formStep === 3 && <ThirdStep data={data} />}
       </AnimatePresence>
 
@@ -127,15 +126,12 @@ const FormButtons = ({
   editor,
   form
 }: formButtonProps) => {
-  console.log(form, 'form');
-
   const isLoading = form.state === Form.Loading;
 
   return (
     <div className='absolute inset-x-0 bottom-0 w-full p-2 '>
-      <div className='flex items-center justify-between px-10 mx-auto md:px-40'>
-        <p>{editor.storage.characterCount.words()} words spoken </p>
-        <div className='flex flex-row items-center gap-4'>
+      <div className='flex flex-col items-center justify-between px-10 mx-auto md:flex-row md:mx-80'>
+        <div className='flex flex-row items-center justify-between w-full gap-4'>
           {formStep !== 1 && (
             <Button buttonType='secondary' onClick={prevFormStep}>
               Back
@@ -143,10 +139,7 @@ const FormButtons = ({
           )}
           <div />
           {formStep >= 1 && (
-            <Button
-              isLoading={isLoading}
-              onClick={nextFormStep}
-            >
+            <Button isLoading={isLoading} onClick={nextFormStep}>
               {formStep === 2 ? 'Submit' : ' Next'}
             </Button>
           )}

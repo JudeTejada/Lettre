@@ -13,7 +13,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const ButtonSwitchStyles = (type: ButtonType, disabled?: boolean) => {
   let baseClassName = clsx(
-    'text-primary-black text-base rounded-lg min-h-[48px] px-10  font-medium',
+    'text-primary-black w-fit text-base rounded-lg min-h-[48px] px-10  font-medium',
     disabled && ' cursor-not-allowed bg-primary-gray'
   );
 

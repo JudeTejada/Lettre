@@ -10,6 +10,11 @@ export enum Form {
   Loading = 'Loading'
 }
 
+export enum LetterStep {
+  FIRST = 'First',
+  FINAL = 'Final'
+}
+
 export type FormState = {
   state: Form;
   message?: string;
