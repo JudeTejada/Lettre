@@ -1,21 +1,16 @@
-import { letterState } from '@/atoms/letter';
 import clsx from 'clsx';
 import QRCode from 'qrcode.react';
-import { useSetRecoilState } from 'recoil';
 import { Editor } from '@tiptap/react';
 import { motion } from 'framer-motion';
 
 import { Button, Input, Label, Tiptap } from '..';
 
-interface StepInputProps {
+interface BaseStepProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
-
-interface FirstStepProps extends StepInputProps {
   editor: Editor;
 }
 
-const FirstStep = ({ editor, onChange }: FirstStepProps) => {
+const FirstStep = ({ editor, onChange }: BaseStepProps) => {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -32,13 +27,16 @@ const FirstStep = ({ editor, onChange }: FirstStepProps) => {
       />
 
       <fieldset className='flex flex-col mb-6 '>
-        <Label htmlFor='message'>Craft your message</Label>
+        <div className='flex flex-row justify-between w-full'>
+          <Label htmlFor='message'>Craft your message</Label>
+          <p>{editor.storage.characterCount.words()} words spoken </p>
+        </div>
         <Tiptap editor={editor} />
       </fieldset>
     </motion.div>
   );
 };
-const SecondStep = ({ onChange }: StepInputProps) => {
+const SecondStep = ({ onChange }: BaseStepProps) => {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -53,6 +51,7 @@ const SecondStep = ({ onChange }: StepInputProps) => {
         >
           Sender
         </label>
+
         <Input
           onChange={onChange}
           type='text'

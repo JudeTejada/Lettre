@@ -24,12 +24,12 @@ export const handleValidation = (letterData: letter, formStep: number) => {
   switch (formStep) {
     case 1: {
       if (!letterData.message) {
-        toast("It's not a letter if there's no message ❌ ");
+        toast.error("It's not a letter if there's no message  ");
 
         return false;
       }
       if (!letterData.title) {
-        toast('Have you forgotten your title? ❌');
+        toast.error('Have you forgotten your title? ');
 
         return false;
       }
@@ -39,7 +39,7 @@ export const handleValidation = (letterData: letter, formStep: number) => {
 
     case 2: {
       if (!letterData.receiver && !letterData.sender) {
-        toast('Please fill  in all the input fields ❌');
+        toast.error('Please fill  in all the input fields ');
         return false;
       }
       return true;
