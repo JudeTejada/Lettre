@@ -95,7 +95,7 @@ const ThirdStep = ({ data }: any) => {
 
   return (
     <div className='flex flex-col items-center'>
-      <h1>Show this to your Special person </h1>;
+      <h1>Show this to your Special person </h1>
       <QRCode
         id='qr-id'
         value={`${process.env.NEXT_PUBLIC_WEBSITE_URL}/${data?.letterId}`}
