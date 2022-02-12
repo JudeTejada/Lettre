@@ -1,7 +1,7 @@
 import { MouseEventHandler, useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import useSWR from 'swr';
-import { useEditor, JSONContent, Editor } from '@tiptap/react'; 
+import { useEditor, JSONContent, Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import CharacterCount from '@tiptap/extension-character-count';
@@ -20,7 +20,8 @@ export const FormMessage = () => {
   const [form, setForm] = useState<FormState>({ state: Form.Initial });
 
   const [formStep, setFormStep] = useState(1);
-  const { data } = useSWR('/api/create');
+  const { data } = useSWR('/api/letter/create');
+
 
   const setLetterState = useSetRecoilState(letterState);
   const letterData = useRecoilValue(letterState);
@@ -42,7 +43,9 @@ export const FormMessage = () => {
   });
 
   useEffect(() => {
-    if (data?.success) setFormStep(currentStep => currentStep + 1);
+    if (data?.success) {
+      setFormStep(currentStep => currentStep + 1);
+    }
   }, [data]);
 
   const handleEditorChange = (message: JSONContent) => {
@@ -96,7 +99,7 @@ export const FormMessage = () => {
     );
   }
   return (
-    <form className='container flex flex-col px-10 py-20 mx-auto md:px-80'>
+    <form className='container flex flex-col px-10 mx-auto md:px-80'>
       <AnimatePresence>
         {formStep === 1 && (
           <FirstStep onChange={handleOnChange} editor={editor} />
