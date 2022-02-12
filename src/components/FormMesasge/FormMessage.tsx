@@ -1,7 +1,7 @@
 import { MouseEventHandler, useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import useSWR from 'swr';
-import { useEditor, JSONContent, Editor } from '@tiptap/react';
+import { useEditor, JSONContent, Editor } from '@tiptap/react'; 
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import CharacterCount from '@tiptap/extension-character-count';
