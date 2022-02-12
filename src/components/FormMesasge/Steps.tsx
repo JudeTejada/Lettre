@@ -2,8 +2,10 @@ import clsx from 'clsx';
 import QRCode from 'qrcode.react';
 import { Editor } from '@tiptap/react';
 import { motion } from 'framer-motion';
+import { useRecoilValue } from 'recoil';
 
 import { Button, Input, Label, Tiptap } from '..';
+import { letterState } from '@/atoms/letter';
 
 interface BaseStepProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -11,6 +13,8 @@ interface BaseStepProps {
 }
 
 const FirstStep = ({ editor, onChange }: BaseStepProps) => {
+  const { title } = useRecoilValue(letterState);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -19,6 +23,7 @@ const FirstStep = ({ editor, onChange }: BaseStepProps) => {
       className={clsx('mb-4 py-20')}
     >
       <input
+        defaultValue={title}
         onChange={onChange}
         type='text'
         name='title'
@@ -37,6 +42,8 @@ const FirstStep = ({ editor, onChange }: BaseStepProps) => {
   );
 };
 const SecondStep = ({ onChange }: BaseStepProps) => {
+  const { sender, receiver } = useRecoilValue(letterState);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -53,6 +60,7 @@ const SecondStep = ({ onChange }: BaseStepProps) => {
         </label>
 
         <Input
+          defaultValue={sender}
           onChange={onChange}
           type='text'
           placeholder='Lee'
@@ -68,6 +76,7 @@ const SecondStep = ({ onChange }: BaseStepProps) => {
           Receiver
         </label>
         <Input
+          defaultValue={receiver}
           onChange={onChange}
           type='text'
           placeholder='Lee'
@@ -96,9 +105,9 @@ const ThirdStep = ({ data }: any) => {
   return (
     <div className='flex flex-col items-center justify-center min-h-screen'>
       <h1 className='mb-4 text-2xl font-bold'>
-        Show this to your Special person{' '}
+        Show this to your special person{' '}
       </h1>
-      <p className='mb-2 text-base'>
+      <p className='mb-6 text-base'>
         Have them scan with using qr a scanner, copy the value of text and paste
         in on your browser.{' '}
       </p>
