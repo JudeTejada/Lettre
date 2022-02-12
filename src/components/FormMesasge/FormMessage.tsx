@@ -5,9 +5,7 @@ import { useEditor, JSONContent, Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import CharacterCount from '@tiptap/extension-character-count';
-import toast from 'react-hot-toast';
 import { AnimatePresence } from 'framer-motion';
-import clsx from 'clsx';
 
 import { Button } from '@/components/.';
 
@@ -16,12 +14,13 @@ import { letterState } from '@/atoms/letter';
 import { handleValidation, submitLetter } from './util';
 import { FirstStep, SecondStep, ThirdStep } from './Steps';
 import { FormState, Form } from '@/utils/types';
+import Router from 'next/router';
 
 export const FormMessage = () => {
   const [form, setForm] = useState<FormState>({ state: Form.Initial });
 
   const [formStep, setFormStep] = useState(1);
-  const { data, error } = useSWR('/api/create');
+  const { data } = useSWR('/api/create');
 
   const setLetterState = useSetRecoilState(letterState);
   const letterData = useRecoilValue(letterState);
@@ -41,13 +40,6 @@ export const FormMessage = () => {
       handleEditorChange(editor.getJSON());
     }
   });
-
-  useEffect(() => {
-    if (error) {
-      toast('Oops! Something went wrong ❌');
-      setFormStep(1);
-    }
-  }, [error]);
 
   useEffect(() => {
     if (data?.success) setFormStep(currentStep => currentStep + 1);
@@ -71,9 +63,7 @@ export const FormMessage = () => {
 
         setForm({ state: Form.Initial });
       } catch (error) {
-        setFormStep(1);
-        setForm({ state: Form.Initial });
-        throw new Error('Sorry something went wrong');
+        setForm({ state: Form.Error });
       }
 
       return;
@@ -86,8 +76,27 @@ export const FormMessage = () => {
 
   if (!editor) return <h1>Loading...</h1>;
 
+  if (form.state === Form.Loading)
+    return (
+      <div className='flex items-center justify-center min-h-screen'>
+        <h1 className='text-2xl text-center loading'>Composing your message</h1>
+      </div>
+    );
+
+  if (form.state === Form.Error) {
+    return (
+      <div className='flex flex-col items-center justify-center min-h-screen'>
+        <h1 className='mb-4 text-2xl'>
+          Ooops! Something went wrong, please try again.
+        </h1>
+        <Button onClick={() => Router.reload(window.location.pathname)}>
+          Refresh
+        </Button>
+      </div>
+    );
+  }
   return (
-    <form>
+    <form className='container flex flex-col px-10 py-20 mx-auto md:px-80'>
       <AnimatePresence>
         {formStep === 1 && (
           <FirstStep onChange={handleOnChange} editor={editor} />
@@ -123,7 +132,6 @@ const FormButtons = ({
   prevFormStep,
   nextFormStep,
   formStep,
-  editor,
   form
 }: formButtonProps) => {
   const isLoading = form.state === Form.Loading;

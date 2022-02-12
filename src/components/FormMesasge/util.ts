@@ -16,7 +16,7 @@ export const submitLetter = async (
     }
   ).then(res => res.json());
 
-  mutate('/api/create', letter);
+  mutate('/api/letter/create', letter);
   return letter;
 };
 

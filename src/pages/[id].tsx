@@ -1,22 +1,21 @@
 import { useEditor, EditorContent } from '@tiptap/react';
-import { GetServerSideProps } from 'next';
 import StarterKit from '@tiptap/starter-kit';
-import type { NextPage } from 'next';
-import { AnimatePresence, motion } from 'framer-motion';
-import { db } from '@/utils/primsa';
-import { letter, LetterStep } from '@/utils/types';
 import { useState } from 'react';
-import { Button } from '../components';
+import { AnimatePresence, motion } from 'framer-motion';
 
-interface letterProps {
+import { db } from '@/utils/primsa';
+
+import { letter, LetterStep } from '@/utils/types';
+import { Button } from '../components';
+import { GetStaticProps } from 'next';
+
+interface stepProps {
   letter: letter;
   setStep: (step: LetterStep) => void;
 }
 
-const Letter = ({ letter }: letterProps) => {
+const Letter = ({ letter }: { letter: letter }) => {
   const [step, setStep] = useState<LetterStep>(LetterStep.FIRST);
-
-  if (!letter) return <h1>Loading....</h1>;
 
   return (
     <div className='grid min-h-screen bg-primary-bg place-items-center'>
@@ -30,11 +29,13 @@ const Letter = ({ letter }: letterProps) => {
   );
 };
 
-const FirstStep = ({ letter, setStep }: letterProps) => {
+const FirstStep = ({ letter, setStep }: stepProps) => {
   return (
     <div className='flex flex-col items-center'>
       {' '}
-      <h1 className='mb-4 text-lg font-bold'>You have a letter from {letter.sender}</h1>
+      <h1 className='mb-4 text-lg font-bold'>
+        You have a letter from {letter.sender}
+      </h1>
       <Button onClick={() => setStep(LetterStep.FINAL)}>Open it now</Button>
     </div>
   );
@@ -64,11 +65,27 @@ const FinalStep = ({ letter }: { letter: letter }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const { letterId } = query!;
+export async function getStaticPaths() {
+  const letters = await db.letter.findMany({
+    select: {
+      id: true
+    }
+  });
+  const paths = letters.map(letter => ({
+    params: { id: letter.id.toString() }
+  }));
+
+  return {
+    paths,
+    fallback: false
+  };
+}
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const { id } = params!;
 
   const letter = await db.letter.findUnique({
-    where: { id: letterId as string }
+    where: { id: id as string }
   });
 
   if (!letter) {
@@ -78,7 +95,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   }
 
   return {
-    props: { letter } // will be passed to the page component as props
+    props: { letter }
   };
 };
 

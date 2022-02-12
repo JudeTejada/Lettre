@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+
+body{
+  @apply bg-primary-bg
+}
+
 .ProseMirror {
   @apply text-[20px] focus:outline-none min-h-[300px];
 }
@@ -11,4 +16,25 @@
   float: left;
   height: 0;
   pointer-events: none;
+}
+.loading:after {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+  -webkit-animation: ellipsis steps(4, end) 900ms infinite;
+  animation: ellipsis steps(4, end) 1400ms infinite;
+  content: '\2026'; /* ascii code for the ellipsis character */
+  width: 0px;
+}
+
+@keyframes ellipsis {
+  to {
+    width: 20px;
+  }
+}
+
+@-webkit-keyframes ellipsis {
+  to {
+    width: 20px;
+  }
 }
