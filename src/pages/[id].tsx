@@ -8,6 +8,7 @@ import { db } from '@/utils/primsa';
 import { letter, LetterStep } from '@/utils/types';
 import { Button } from '../components';
 import { GetStaticProps } from 'next';
+import Head from 'next/head';
 
 interface stepProps {
   letter: letter;
@@ -50,18 +51,23 @@ const FinalStep = ({ letter }: { letter: letter }) => {
 
   if (!editor) return null;
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className='container flex flex-col px-10 py-10 mx-auto md:w-2/4 '
-    >
-      <h1 className='mb-12 text-3xl font-bold text-center font-charter'>
-        {letter?.title}
-      </h1>
-      <div className='flex flex-col items-center'>
-        <EditorContent editor={editor} />
-      </div>
-    </motion.div>
+    <>
+      <Head>
+        <title>{letter?.title}</title>
+      </Head>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className='container flex flex-col px-10 py-10 mx-auto md:w-2/4 '
+      >
+        <h1 className='mb-12 text-3xl font-bold text-center font-charter'>
+          {letter?.title}
+        </h1>
+        <div className='flex flex-col items-center'>
+          <EditorContent editor={editor} />
+        </div>
+      </motion.div>
+    </>
   );
 };
 
