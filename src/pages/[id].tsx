@@ -7,7 +7,7 @@ import { db } from '@/utils/primsa';
 
 import { letter, LetterStep } from '@/utils/types';
 import { Button } from '../components';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 
 interface stepProps {
@@ -71,23 +71,7 @@ const FinalStep = ({ letter }: { letter: letter }) => {
   );
 };
 
-export async function getStaticPaths() {
-  const letters = await db.letter.findMany({
-    select: {
-      id: true
-    }
-  });
-  const paths = letters.map(letter => ({
-    params: { id: letter.id.toString() }
-  }));
-
-  return {
-    paths,
-    fallback: false
-  };
-}
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const { id } = params!;
 
   const letter = await db.letter.findUnique({
