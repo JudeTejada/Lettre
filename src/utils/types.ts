@@ -7,7 +7,8 @@ export interface letter {
 
 export enum Form {
   Initial = 'Initial',
-  Loading = 'Loading'
+  Loading = 'Loading',
+  Error = 'Error'
 }
 
 export enum LetterStep {
