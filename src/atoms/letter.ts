@@ -3,5 +3,10 @@ import { letter } from '@/utils/types';
 
 export const letterState = atom({
   key: 'letterState',
-  default: {} as letter
+  default: {
+    message: '',
+    title: '',
+    sender: '',
+    receiver: ''
+  } as letter
 });

@@ -4,6 +4,7 @@ type InputProps = {
   type: string;
   placeholder: string;
   name: string;
+  defaultValue: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
