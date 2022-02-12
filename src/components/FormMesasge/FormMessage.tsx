@@ -14,14 +14,15 @@ import { letterState } from '@/atoms/letter';
 import { handleValidation, submitLetter } from './util';
 import { FirstStep, SecondStep, ThirdStep } from './Steps';
 import { FormState, Form } from '@/utils/types';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 
 export const FormMessage = () => {
+  const router = useRouter();
+
   const [form, setForm] = useState<FormState>({ state: Form.Initial });
 
   const [formStep, setFormStep] = useState(1);
   const { data } = useSWR('/api/letter/create');
-
 
   const setLetterState = useSetRecoilState(letterState);
   const letterData = useRecoilValue(letterState);
@@ -92,9 +93,7 @@ export const FormMessage = () => {
         <h1 className='mb-4 text-2xl'>
           Ooops! Something went wrong, please try again.
         </h1>
-        <Button onClick={() => Router.reload(window.location.pathname)}>
-          Refresh
-        </Button>
+        <Button onClick={() => Router.reload(router.pathname)}>Refresh</Button>
       </div>
     );
   }
