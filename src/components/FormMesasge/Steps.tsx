@@ -16,7 +16,7 @@ const FirstStep = ({ editor, onChange }: BaseStepProps) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className={clsx('mb-4')}
+      className={clsx('mb-4 py-20')}
     >
       <input
         onChange={onChange}
@@ -42,7 +42,7 @@ const SecondStep = ({ onChange }: BaseStepProps) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className={clsx(' mb-4  ')}
+      className={clsx(' mb-4  py-20 ')}
     >
       <fieldset className='flex flex-col mb-6 '>
         <label
@@ -94,8 +94,14 @@ const ThirdStep = ({ data }: any) => {
   };
 
   return (
-    <div className='flex flex-col items-center'>
-      <h1>Show this to your Special person </h1>
+    <div className='flex flex-col items-center justify-center min-h-screen'>
+      <h1 className='mb-4 text-2xl font-bold'>
+        Show this to your Special person{' '}
+      </h1>
+      <p className='mb-2 text-base'>
+        Have them scan with using qr a scanner, copy the value of text and paste
+        in on your browser.{' '}
+      </p>
       <QRCode
         id='qr-id'
         value={`${process.env.NEXT_PUBLIC_WEBSITE_URL}/${data?.letterId}`}
