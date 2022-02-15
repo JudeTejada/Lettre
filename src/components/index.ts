@@ -3,3 +3,4 @@ export * from './Label';
 export * from './Button';
 export * from './Tiptap';
 export * from './FormMesasge';
+export * from './Seo';
