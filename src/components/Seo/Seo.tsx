@@ -6,10 +6,11 @@ export const Seo = ({ title }: SeoProps) => {
   const meta = {
     title: title || 'Lettre',
     description: 'Send a letter to a special person using with a QR Code.',
-    image: '../../../public/hero.png',
+    image: `${process.env.NEXT_PUBLIC_WEBSITE_URL}/hero.png`,
     type: 'Website'
   };
 
+  console.log(meta.image);
   return (
     <>
       <title>{meta.title}</title>
