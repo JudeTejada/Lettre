@@ -16,13 +16,14 @@ const FirstStep = ({ editor, onChange }: BaseStepProps) => {
   const { title } = useRecoilValue(letterState);
 
   return (
-    <motion.div
+    <motion.form
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className={clsx('mb-4 py-20')}
     >
       <input
+        required
         defaultValue={title}
         onChange={onChange}
         type='text'
@@ -31,14 +32,14 @@ const FirstStep = ({ editor, onChange }: BaseStepProps) => {
         placeholder='Your title'
       />
 
-      <fieldset className='flex flex-col mb-6 '>
+      <div className='flex flex-col mb-6 '>
         <div className='flex flex-row justify-between w-full'>
           <Label htmlFor='message'>Craft your message</Label>
           <p>{editor.storage.characterCount.words()} words spoken </p>
         </div>
         <Tiptap editor={editor} />
-      </fieldset>
-    </motion.div>
+      </div>
+    </motion.form>
   );
 };
 const SecondStep = ({ onChange }: BaseStepProps) => {
@@ -51,6 +52,7 @@ const SecondStep = ({ onChange }: BaseStepProps) => {
       exit={{ opacity: 0 }}
       className={clsx(' mb-4  py-20 ')}
     >
+      <h2 className='mb-4 text-2xl text-center'>Fill in the remaining details to complete your message</h2>
       <fieldset className='flex flex-col mb-6 '>
         <label
           htmlFor='sender'
@@ -79,7 +81,7 @@ const SecondStep = ({ onChange }: BaseStepProps) => {
           defaultValue={receiver}
           onChange={onChange}
           type='text'
-          placeholder='Lee'
+          placeholder='John'
           name='receiver'
         />
       </fieldset>
