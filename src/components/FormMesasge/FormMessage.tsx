@@ -98,7 +98,7 @@ export const FormMessage = () => {
     );
   }
   return (
-    <form className='container flex flex-col px-10 mx-auto md:px-80'>
+    <form className='container flex flex-col px-10 mx-auto md:px-40 lg:px-80'>
       <AnimatePresence>
         {formStep === 1 && (
           <FirstStep onChange={handleOnChange} editor={editor} />
