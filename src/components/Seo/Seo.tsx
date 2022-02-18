@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 interface SeoProps {
@@ -14,7 +15,7 @@ export const Seo = ({ title }: SeoProps) => {
   };
 
   return (
-    <>
+    <Head>
       <title>{meta.title}</title>
       <meta name='robots' content='follow, index' />
       <meta charSet='UTF-8' />
@@ -123,6 +124,6 @@ export const Seo = ({ title }: SeoProps) => {
       <meta name='twitter:title' content={meta.title} />
       <meta name='twitter:description' content={meta.description} />
       <meta name='twitter:image' content={meta.image} />
-    </>
+    </Head>
   );
 };
