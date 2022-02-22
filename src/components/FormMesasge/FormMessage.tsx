@@ -26,12 +26,15 @@ export const FormMessage = () => {
 
   const setLetterState = useSetRecoilState(letterState);
   const letterData = useRecoilValue(letterState);
+  console.log(letterData, 'letterData');
 
   const editor = useEditor({
     extensions: [
       StarterKit,
 
-      CharacterCount,
+      CharacterCount.configure({
+        limit: 300
+      }),
       Placeholder.configure({
         emptyEditorClass: 'tiptap-editor-is-empty',
         placeholder: 'Express your thought here...'
@@ -116,7 +119,7 @@ export const FormMessage = () => {
           formStep={formStep}
           prevFormStep={prevFormStep}
           editor={editor}
-        />
+      />
       )}
     </div>
   );
