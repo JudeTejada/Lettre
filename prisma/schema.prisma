@@ -2,15 +2,13 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
-  referentialIntegrity = "prisma"
+
 }
 
-generator client { 
+generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity"]
 }
 
 model Letter {
@@ -18,5 +16,5 @@ model Letter {
   sender   String
   receiver String
   title    String
-  message  String
+  message  String   
 }

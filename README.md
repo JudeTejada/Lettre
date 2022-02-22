@@ -15,7 +15,7 @@ Connecting with Planet scale
 ```bash
 
  pscale connect lettre dev --port 3301
-pscale connect lettre main --port 3302
+// pscale connect lettre main --port 3302
 
 
 ```

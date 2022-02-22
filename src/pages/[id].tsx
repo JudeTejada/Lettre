@@ -55,14 +55,12 @@ const FinalStep = ({ letter }: { letter: letter }) => {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className='container flex flex-col px-10 py-10 mx-auto md:w-2/4 '
+        className='container flex flex-col w-full px-10 py-10 mx-auto '
       >
         <h1 className='mb-12 text-3xl font-bold text-center font-charter'>
           {letter?.title}
         </h1>
-        <div className='flex flex-col items-center'>
           <EditorContent editor={editor} />
-        </div>
       </motion.div>
     </>
   );

@@ -35,7 +35,7 @@ const FirstStep = ({ editor, onChange }: BaseStepProps) => {
       <div className='flex flex-col mb-6 '>
         <div className='flex flex-row justify-between w-full'>
           <Label htmlFor='message'>Craft your message</Label>
-          <p>{editor.storage.characterCount.words()} words spoken </p>
+          <p>{editor.storage.characterCount.characters()} characters </p>
         </div>
         <Tiptap editor={editor} />
       </div>
