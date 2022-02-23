@@ -35,7 +35,10 @@ const FirstStep = ({ editor, onChange }: BaseStepProps) => {
       <div className='flex flex-col mb-6 '>
         <div className='flex flex-row justify-between w-full'>
           <Label htmlFor='message'>Craft your message</Label>
-          <p>{editor.storage.characterCount.characters()} characters </p>
+          <div className='opacity-60'>
+            <span>{editor.storage.characterCount.characters()} </span>
+            <span className='op'>/ 300 characters </span>
+          </div>
         </div>
         <Tiptap editor={editor} />
       </div>
@@ -52,7 +55,9 @@ const SecondStep = ({ onChange }: BaseStepProps) => {
       exit={{ opacity: 0 }}
       className={clsx(' mb-4  py-20 ')}
     >
-      <h2 className='mb-4 text-2xl text-center'>Fill in the remaining details to complete your message</h2>
+      <h2 className='mb-4 text-2xl text-center'>
+        Fill in the remaining details to complete your message
+      </h2>
       <fieldset className='flex flex-col mb-6 '>
         <label
           htmlFor='sender'
