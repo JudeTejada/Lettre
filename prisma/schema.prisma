@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model Letter {
@@ -12,5 +13,5 @@ model Letter {
   sender   String
   receiver String
   title    String
-  message  String
+  message  String @db.Text
 }

@@ -19,7 +19,7 @@ npx prisma db push
 
 ```
 
-Connecting with Planet scale
+Connecting with Planet scale locally
 
 ```bash
 
