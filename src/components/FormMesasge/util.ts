@@ -4,7 +4,7 @@ import { mutate } from 'swr';
 
 export const submitLetter = async (
   letterData: letter
-): Promise<{ letterId: string }> => {
+): Promise<{ message?: string; success: boolean }> => {
   const letter = await fetch(
     `${process.env.NEXT_PUBLIC_WEBSITE_URL}/api/letter/create`,
     {

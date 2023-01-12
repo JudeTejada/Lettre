@@ -1,4 +1,4 @@
-import { MouseEventHandler, useEffect, useState } from 'react';
+import { MouseEventHandler, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import useSWR from 'swr';
 import { useEditor, JSONContent, Editor } from '@tiptap/react';
@@ -6,7 +6,6 @@ import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import CharacterCount from '@tiptap/extension-character-count';
 import { AnimatePresence } from 'framer-motion';
-import { useRouter } from 'next/router';
 
 import { Button } from '@/components/.';
 
@@ -17,8 +16,6 @@ import { FirstStep, SecondStep, ThirdStep } from './Steps';
 import { FormState, Form } from '@/utils/types';
 
 export const FormMessage = () => {
-  const router = useRouter();
-
   const [form, setForm] = useState<FormState>({ state: Form.Initial });
 
   const [formStep, setFormStep] = useState(1);
@@ -26,7 +23,6 @@ export const FormMessage = () => {
 
   const setLetterState = useSetRecoilState(letterState);
   const letterData = useRecoilValue(letterState);
-  console.log(letterData, 'letterData');
 
   const editor = useEditor({
     extensions: [
@@ -46,12 +42,6 @@ export const FormMessage = () => {
     }
   });
 
-  useEffect(() => {
-    if (data?.success) {
-      setFormStep(currentStep => currentStep + 1);
-    }
-  }, [data]);
-
   const handleEditorChange = (message: JSONContent) => {
     setLetterState(letter => ({ ...letter, message: JSON.stringify(message) }));
   };
@@ -68,7 +58,10 @@ export const FormMessage = () => {
         setForm({ state: Form.Loading });
         const res = await submitLetter(letterData);
 
+        if (!res.success) return setForm({ state: Form.Error });
+
         setForm({ state: Form.Initial });
+        setFormStep(currentStep => currentStep + 1);
       } catch (error) {
         setForm({ state: Form.Error });
       }
@@ -96,7 +89,7 @@ export const FormMessage = () => {
         <h1 className='mb-4 text-2xl'>
           Ooops! Something went wrong, please try again.
         </h1>
-        <Button onClick={() => router.replace(router.asPath)}>Refresh</Button>
+        <Button onClick={() => window.location.reload()}>Refresh</Button>
       </div>
     );
   }
@@ -119,7 +112,7 @@ export const FormMessage = () => {
           formStep={formStep}
           prevFormStep={prevFormStep}
           editor={editor}
-      />
+        />
       )}
     </div>
   );
