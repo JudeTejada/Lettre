@@ -1,4 +1,18 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+# Lettre
+
+Send a letter to someone with QR code
+
+
+## Tech Stack
+
+- Next.js
+- Tailwindcss
+- Prisma
+- Planetscale
+
+
+
 
 ## Getting Started
 
