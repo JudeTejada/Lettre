@@ -2,8 +2,6 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-
-
 To setup the project, Connect with Planetscale
 
 Connecting with Planet scale locally
@@ -12,13 +10,21 @@ Connecting with Planet scale locally
  pscale connect [database] [branch] --port 3301
 ```
 
+After connecting to planetscale, paste in the url on your env file
+
+```
+DATABASE_URL=URL
+```
+
 Add schema to planetscale database
+
 ```bash
 npx prisma db push
 
 ```
 
 To sync prisma on the client run:
+
 ```bash
 npx prisma generate
 ```
