@@ -1,4 +1,4 @@
-import { db } from '@/utils/primsa';
+import { db } from '@/utils/prisma';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { z } from 'zod';
 import { withValidation } from 'next-validations';
