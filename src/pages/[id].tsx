@@ -3,7 +3,7 @@ import StarterKit from '@tiptap/starter-kit';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 
-import { db } from '@/utils/primsa';
+import { db } from '@/utils/prisma';
 
 import { letter, LetterStep } from '@/utils/types';
 import { Button, Seo } from '../components';

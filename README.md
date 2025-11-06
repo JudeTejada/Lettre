@@ -9,28 +9,22 @@ Send a letter to someone with QR code
 - Next.js
 - Tailwindcss
 - Prisma
-- Planetscale
+- NeonDB
 
 
 
 
 ## Getting Started
 
-To setup the project, Connect with Planetscale
+To setup the project, create a NeonDB database and get your connection string.
 
-Connecting with Planet scale locally
-
-```bash
- pscale connect [database] [branch] --port 3301
-```
-
-After connecting to planetscale, paste in the url on your env file
+Add your NeonDB connection string to your .env file:
 
 ```
-DATABASE_URL=URL
+DATABASE_URL=postgresql://neondb_owner:your-password@your-neon-host/neondb?sslmode=require&channel_binding=require
 ```
 
-Add schema to planetscale database
+Add schema to NeonDB database
 
 ```bash
 npx prisma db push
